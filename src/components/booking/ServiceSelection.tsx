@@ -12,16 +12,18 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { addDays, format } from "date-fns";
-import { DateRange } from "react-day-picker";
 
 export const ServiceSelection = ({
   onContinue,
 }: {
-  onContinue: (data: any) => void;
+  onContinue: () => void;
 }) => {
   const [location, setLocation] = useState("");
   const [serviceType, setServiceType] = useState("");
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
     from: undefined,
     to: undefined,
   });
@@ -91,7 +93,7 @@ export const ServiceSelection = ({
 
   // Format date range display
   const getDateRangeDisplay = () => {
-    if (dateRange?.from && dateRange?.to) {
+    if (dateRange.from && dateRange.to) {
       return `${format(dateRange.from, "d MMM")} – ${format(dateRange.to, "d MMM")}`;
     }
     return "";
@@ -99,16 +101,6 @@ export const ServiceSelection = ({
   
   const toggleRecipientOptions = () => {
     setShowRecipientOptions(!showRecipientOptions);
-  };
-
-  const handleContinue = () => {
-    onContinue({
-      location,
-      serviceType,
-      dateRange,
-      adults,
-      children
-    });
   };
   
   return (
@@ -304,9 +296,9 @@ export const ServiceSelection = ({
       
       {/* Book Now Button */}
       <Button 
-        onClick={handleContinue} 
+        onClick={onContinue} 
         className="font-semibold w-full py-5 h-auto text-white bg-black hover:bg-black/90 rounded-md"
-        disabled={!location || !serviceType || !dateRange?.from || !dateRange?.to || (adults === 0 && children === 0)}
+        disabled={!location || !serviceType || !dateRange.from || !dateRange.to || (adults === 0 && children === 0)}
       >
         BOOK NOW
       </Button>

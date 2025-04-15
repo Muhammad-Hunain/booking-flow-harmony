@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AlertCircle, Info, CreditCard } from "lucide-react";
+import { AlertCircle, CreditCard, Info } from "lucide-react";
 
 interface PaymentFormProps {
   selections: {
@@ -26,9 +26,6 @@ export const PaymentForm = ({ selections, onContinue, onBack }: PaymentFormProps
     expiryMonth: "",
     expiryYear: "",
     cvv: "",
-    addressLine1: "",
-    addressLine2: "",
-    addressLine3: "",
   });
 
   const handleChange = (field: string, value: string) => {
@@ -87,42 +84,6 @@ export const PaymentForm = ({ selections, onContinue, onBack }: PaymentFormProps
             <Label htmlFor="different-address" className="ml-3 font-medium">Use different address</Label>
           </div>
         </RadioGroup>
-        
-        {/* Different address fields */}
-        {address === "different" && (
-          <div className="space-y-3 mt-4 pl-6">
-            <div>
-              <Label htmlFor="addressLine1" className="text-xs mb-1">Address line 1 <span className="text-amber-500">*</span></Label>
-              <Input 
-                id="addressLine1" 
-                value={formData.addressLine1}
-                onChange={(e) => handleChange("addressLine1", e.target.value)}
-                className="w-full"
-                placeholder="Enter address line 1"
-              />
-            </div>
-            <div>
-              <Label htmlFor="addressLine2" className="text-xs mb-1">Address line 2</Label>
-              <Input 
-                id="addressLine2" 
-                value={formData.addressLine2}
-                onChange={(e) => handleChange("addressLine2", e.target.value)}
-                className="w-full"
-                placeholder="Enter address line 2"
-              />
-            </div>
-            <div>
-              <Label htmlFor="addressLine3" className="text-xs mb-1">Address line 3</Label>
-              <Input 
-                id="addressLine3" 
-                value={formData.addressLine3}
-                onChange={(e) => handleChange("addressLine3", e.target.value)}
-                className="w-full"
-                placeholder="Enter address line 3"
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Card Details */}
@@ -132,11 +93,7 @@ export const PaymentForm = ({ selections, onContinue, onBack }: PaymentFormProps
           Please enter your card details to complete your payment. You may be redirected to your bank provider to verify your details.
         </p>
         <div className="flex items-center space-x-2 mt-2">
-          {/* Using a custom Stripe logo instead of an icon from lucide-react */}
-          <div className="flex items-center">
-            <CreditCard className="h-6 w-6 text-[#635BFF]" />
-            <span className="ml-2 font-semibold text-[#635BFF]">Stripe</span>
-          </div>
+          <CreditCard className="h-6 w-6 text-gray-500" />
         </div>
         <div className="space-y-3 mt-4">
           <div>
