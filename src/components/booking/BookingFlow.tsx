@@ -5,14 +5,15 @@ import { ServiceSelection } from "./ServiceSelection";
 import { PricingBreakdown } from "./PricingBreakdown";
 import { PersonalDetailsForm } from "./PersonalDetailsForm";
 import { ServiceRecipientForm } from "./ServiceRecipientForm";
+import { PaymentForm } from "./PaymentForm";
 import { Card } from "@/components/ui/card";
 
 const STEPS: Step[] = [
-  { id: 1, name: "BOOK A SERVICE", completed: false, current: true },
-  { id: 2, name: "PRICE BREAKDOWN", completed: false, current: false },
-  { id: 3, name: "PERSONAL DETAILS", completed: false, current: false },
-  { id: 4, name: "PAYMENT", completed: false, current: false },
-  { id: 5, name: "BOOKING CONFIRMATION", completed: false, current: false },
+  { id: 1, name: "Book a Service", completed: false, current: true },
+  { id: 2, name: "Price Breakdown", completed: false, current: false },
+  { id: 3, name: "Personal Details", completed: false, current: false },
+  { id: 4, name: "Payment", completed: false, current: false },
+  { id: 5, name: "Booking Confirmation", completed: false, current: false },
 ];
 
 export const BookingFlow = () => {
@@ -66,7 +67,7 @@ export const BookingFlow = () => {
       case 3:
         return <PersonalDetailsForm selections={selections} onContinue={handleNextStep} onBack={handlePreviousStep} />;
       case 4:
-        return <ServiceRecipientForm onContinue={handleNextStep} onBack={handlePreviousStep} />;
+        return <PaymentForm selections={selections} onContinue={handleNextStep} onBack={handlePreviousStep} />;
       case 5:
         return (
           <div className="text-center p-6">

@@ -36,7 +36,7 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
               </div>
               
               <span
-                className={`text-[10px] font-semibold mt-2 text-center ${
+                className={`text-[10px] font-semibold mt-2 text-center uppercase ${
                   step.current || step.completed ? "text-amber-500" : "text-gray-400"
                 }`}
               >
@@ -47,7 +47,9 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
             {index < steps.length - 1 && (
               <div 
                 className={`h-0.5 flex-1 mx-1 ${
-                  step.completed ? "bg-amber-500" : "bg-gray-200"
+                  steps[index + 1].completed || steps[index + 1].current 
+                    ? "bg-amber-500" 
+                    : "bg-gray-200"
                 }`}
               />
             )}
