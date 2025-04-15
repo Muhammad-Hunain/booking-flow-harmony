@@ -1,8 +1,8 @@
 
 import { MapPin, Users, Calendar, User, Info } from "lucide-react";
-import { SelectionTag } from "./SelectionTag";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface PriceLineProps {
   label: string;
@@ -16,12 +16,34 @@ const PriceLine = ({ label, value, showInfoIcon = true, className }: PriceLinePr
     <div className="flex items-center">
       <span className="text-bookingText">{label}</span>
       {showInfoIcon && (
-        <Info size={16} className="ml-2 text-bookingMuted" />
+        <Info size={16} className="ml-2 text-bookingMuted cursor-help" />
       )}
     </div>
     <span className="font-medium text-bookingText">{value}</span>
   </div>
 );
+
+const ServiceSummary = ({
+  title,
+  icon,
+  value,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  value: string;
+}) => {
+  return (
+    <div className="flex items-center border-b border-gray-100 py-3">
+      <div className="flex-shrink-0 text-bookingText opacity-70 mr-3">
+        {icon}
+      </div>
+      <div className="flex flex-col">
+        <p className="text-xs text-bookingMuted">{title}</p>
+        <p className="font-medium text-bookingText">{value}</p>
+      </div>
+    </div>
+  );
+};
 
 export const PricingBreakdown = ({
   onContinue,
@@ -29,47 +51,47 @@ export const PricingBreakdown = ({
   onContinue: () => void;
 }) => {
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold text-center mb-8 text-bookingText">
+    <div className="w-full">
+      <h2 className="text-xl font-bold text-center mb-6 text-bookingText">
         Pricing Breakdown
       </h2>
       
       {/* Selection Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <SelectionTag 
+      <div className="mb-6">
+        <ServiceSummary 
+          title="Location" 
           icon={<MapPin size={20} />} 
-          label="Location" 
           value="Leeds - City Centre" 
         />
-        <SelectionTag 
+        <ServiceSummary 
+          title="Service Type" 
           icon={<Users size={20} />} 
-          label="Service Type" 
           value="Mentor/Companion" 
         />
-        <SelectionTag 
+        <ServiceSummary 
+          title="Dates" 
           icon={<Calendar size={20} />} 
-          label="Dates" 
           value="1 Dec – 7 Dec" 
         />
-        <SelectionTag 
+        <ServiceSummary 
+          title="Group" 
           icon={<User size={20} />} 
-          label="Group" 
           value="1 Adult, 1 Child" 
         />
       </div>
       
       {/* Pricing Card */}
-      <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
+      <div className="bg-white rounded-lg p-5 border border-gray-100">
         <h3 className="text-lg font-bold mb-4 text-bookingText">Our Rates Explained</h3>
         
-        <div className="space-y-1 mb-6 divide-y divide-gray-100">
+        <div className="space-y-1 mb-5 divide-y divide-gray-100">
           <PriceLine label="Day Rate" value="£220.00 per day" />
           <PriceLine label="Travel Cost" value="£30.00 per day" />
           <PriceLine label="Accommodation" value="N/A" />
           <PriceLine label="Food Allowance" value="£30.00 per day" />
         </div>
         
-        <div className="pt-4 border-t border-gray-200">
+        <div className="pt-3 border-t border-gray-200">
           <PriceLine 
             label="Total Per Day" 
             value="£280.00" 
@@ -90,11 +112,11 @@ export const PricingBreakdown = ({
         </div>
       </div>
       
-      <div className="mt-10 flex justify-center">
+      <div className="mt-6">
         <Button 
           onClick={onContinue} 
           variant="booking"
-          className="font-medium px-10 py-6 h-auto w-full max-w-md"
+          className="font-medium w-full py-5 h-auto"
         >
           Continue
         </Button>
