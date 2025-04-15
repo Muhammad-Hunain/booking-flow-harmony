@@ -24,14 +24,14 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
                   step.completed
                     ? "bg-amber-500 text-white"
                     : step.current
-                    ? "bg-green-500 text-white"
+                    ? "bg-amber-500 text-white"
                     : "bg-gray-300 text-white"
                 }`}
               >
                 {step.completed ? (
                   <Check className="w-4 h-4" />
                 ) : (
-                  <span className="text-xs">{step.id}</span>
+                  <span className="text-xs font-semibold">{step.id}</span>
                 )}
               </div>
               
@@ -47,7 +47,7 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
             {index < steps.length - 1 && (
               <div 
                 className={`h-0.5 flex-1 ${
-                  steps[index + 1].completed || steps[index + 1].current 
+                  steps[index + 1].completed || steps[index + 1].current || step.completed
                     ? "bg-amber-500" 
                     : "bg-gray-200"
                 }`}

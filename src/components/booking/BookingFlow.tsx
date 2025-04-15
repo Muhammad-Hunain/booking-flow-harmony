@@ -5,6 +5,7 @@ import { ServiceSelection } from "./ServiceSelection";
 import { PricingBreakdown } from "./PricingBreakdown";
 import { PersonalDetailsForm } from "./PersonalDetailsForm";
 import { PaymentForm } from "./PaymentForm";
+import { BookingConfirmation } from "./BookingConfirmation";
 import { Card } from "@/components/ui/card";
 
 const STEPS: Step[] = [
@@ -24,6 +25,9 @@ export const BookingFlow = () => {
     dates: "1 Dec – 7 Dec",
     group: "1 Adult, 1 Child"
   });
+  
+  // Generate a booking reference based on location
+  const bookingReference = `LON000000`;
 
   const handleNextStep = () => {
     if (currentStep < steps.length) {
@@ -68,30 +72,19 @@ export const BookingFlow = () => {
       case 4:
         return <PaymentForm selections={selections} onContinue={handleNextStep} onBack={handlePreviousStep} />;
       case 5:
-        return (
-          <div className="text-center p-6">
-            <h2 className="text-2xl font-bold mb-4">Booking Confirmation</h2>
-            <p className="text-gray-600 mb-6">
-              Thank you for your booking! A confirmation email has been sent to your email address.
-            </p>
-            <div className="flex justify-center space-x-4">
-              <button 
-                onClick={() => {
-                  const updatedSteps = STEPS.map(step => ({
-                    ...step,
-                    completed: false,
-                    current: step.id === 1
-                  }));
-                  setSteps(updatedSteps);
-                  setCurrentStep(1);
-                }}
-                className="px-4 py-2 rounded-md bg-amber-100 text-amber-900 hover:bg-amber-200"
-              >
-                Make a New Booking
-              </button>
-            </div>
-          </div>
-        );
+        return <BookingConfirmation 
+          selections={selections} 
+          bookingReference={bookingReference}
+          onNewBooking={() => {
+            const updatedSteps = STEPS.map(step => ({
+              ...step,
+              completed: false,
+              current: step.id === 1
+            }));
+            setSteps(updatedSteps);
+            setCurrentStep(1);
+          }}
+        />;
       default:
         return (
           <div className="text-center p-6">
