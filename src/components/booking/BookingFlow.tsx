@@ -20,14 +20,25 @@ export const BookingFlow = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [steps, setSteps] = useState(STEPS);
   const [selections, setSelections] = useState({
-    location: "Leeds - City Centre",
-    serviceType: "Mentor/Companion",
-    dates: "1 Dec – 7 Dec",
-    group: "1 Adult, 1 Child"
+    location: "",
+    serviceType: "",
+    dates: "",
+    adults: 1,
+    children: 0,
+    group: "1 Adult"
   });
   
   // Generate a booking reference based on location
-  const bookingReference = `LON000000`;
+  const getLocationPrefix = (location: string) => {
+    if (location.startsWith("London")) return "LON";
+    if (location.startsWith("Manchester")) return "MAN";
+    if (location.startsWith("Leeds")) return "LEE";
+    return "LHB";
+  };
+  
+  const bookingReference = selections.location ? 
+    `${getLocationPrefix(selections.location)}${Math.floor(Math.random() * 1000000).toString().padStart(6, '0')}` : 
+    'LHB000000';
 
   const handleNextStep = () => {
     if (currentStep < steps.length) {
@@ -59,6 +70,13 @@ export const BookingFlow = () => {
       setSteps(updatedSteps);
       setCurrentStep((prev) => prev - 1);
     }
+  };
+
+  const updateSelections = (newSelections: Partial<typeof selections>) => {
+    setSelections(prev => ({
+      ...prev,
+      ...newSelections
+    }));
   };
 
   const renderStepContent = () => {
