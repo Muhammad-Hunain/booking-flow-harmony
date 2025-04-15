@@ -20,9 +20,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Info, Lock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
 
 // Define form validation schema
 const formSchema = z.object({
+  // First recipient (self)
   title: z.string().min(1, { message: "Title is required." }),
   firstName: z.string().min(1, { message: "First name is required." }),
   lastName: z.string().min(1, { message: "Last name is required." }),
@@ -37,14 +39,21 @@ const formSchema = z.object({
   addressLine2: z.string().optional(),
   addressLine3: z.string().optional(),
   
-  // Service recipient fields
+  // Service recipient 2 fields
+  recipientTitle: z.string().optional(),
   recipientFirstName: z.string().optional(),
   recipientLastName: z.string().optional(),
+  recipientEmail: z.string().email({ message: "Please enter a valid email address." }).optional(),
+  recipientMobile: z.string().optional(),
+  recipientLandline: z.string().optional(),
   recipientDateOfBirth: z.string().optional(),
   recipientGender: z.enum(["Male", "Female"]).optional(),
   recipientNationality: z.string().optional(),
   recipientAddress: z.string().optional(),
   recipientPostcode: z.string().optional(),
+  recipientAddressLine1: z.string().optional(),
+  recipientAddressLine2: z.string().optional(),
+  recipientAddressLine3: z.string().optional(),
   
   // Special requirements fields
   hasDisability: z.enum(["Yes", "No"]).optional(),
@@ -98,13 +107,20 @@ export const PersonalDetailsForm = ({
       addressLine3: "",
       
       // Service recipient fields
+      recipientTitle: "",
       recipientFirstName: "",
       recipientLastName: "",
+      recipientEmail: "",
+      recipientMobile: "",
+      recipientLandline: "",
       recipientDateOfBirth: "",
       recipientGender: "Female",
       recipientNationality: "",
       recipientAddress: "",
       recipientPostcode: "",
+      recipientAddressLine1: "",
+      recipientAddressLine2: "",
+      recipientAddressLine3: "",
       
       // Special requirements fields
       hasDisability: "No",
@@ -133,6 +149,20 @@ export const PersonalDetailsForm = ({
     setShowRecipientAddressFields(!showRecipientAddressFields);
   };
 
+  const countries = [
+    { code: "GB", name: "United Kingdom" },
+    { code: "US", name: "United States" },
+    { code: "CA", name: "Canada" },
+    { code: "AU", name: "Australia" },
+    { code: "FR", name: "France" },
+    { code: "DE", name: "Germany" },
+    { code: "IT", name: "Italy" },
+    { code: "ES", name: "Spain" },
+    { code: "JP", name: "Japan" },
+    { code: "CN", name: "China" },
+    { code: "IN", name: "India" },
+  ];
+
   return (
     <div className="w-full max-w-3xl mx-auto">
       {/* Security note */}
@@ -150,81 +180,79 @@ export const PersonalDetailsForm = ({
             <h2 className="text-xl font-bold text-[#FFCF00] mb-6">YOUR DETAILS</h2>
             
             <div className="space-y-5">
-              {/* Name fields */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Title */}
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 flex items-center">
-                        Title <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
-                            <SelectValue placeholder="Select title" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Mr">Mr</SelectItem>
-                          <SelectItem value="Mrs">Mrs</SelectItem>
-                          <SelectItem value="Ms">Ms</SelectItem>
-                          <SelectItem value="Miss">Miss</SelectItem>
-                          <SelectItem value="Master">Master</SelectItem>
-                          <SelectItem value="Lord">Lord</SelectItem>
-                          <SelectItem value="Lady">Lady</SelectItem>
-                          <SelectItem value="Sir">Sir</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* First Name */}
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 flex items-center">
-                        First name <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
+              {/* Name fields - Each field in a separate row */}
+              {/* Title */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      Title <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <Input
-                          placeholder="Enter first name"
-                          {...field}
-                          className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                        />
+                        <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
+                          <SelectValue placeholder="Select title" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      <SelectContent>
+                        <SelectItem value="Mr">Mr</SelectItem>
+                        <SelectItem value="Mrs">Mrs</SelectItem>
+                        <SelectItem value="Ms">Ms</SelectItem>
+                        <SelectItem value="Miss">Miss</SelectItem>
+                        <SelectItem value="Master">Master</SelectItem>
+                        <SelectItem value="Lord">Lord</SelectItem>
+                        <SelectItem value="Lady">Lady</SelectItem>
+                        <SelectItem value="Sir">Sir</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                {/* Last Name */}
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 flex items-center">
-                        Last name <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter last name"
-                          {...field}
-                          className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              {/* First Name */}
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      First name <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter first name"
+                        {...field}
+                        className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Last Name */}
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      Last name <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter last name"
+                        {...field}
+                        className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Email */}
               <FormField
@@ -248,68 +276,65 @@ export const PersonalDetailsForm = ({
                 )}
               />
 
-              {/* Phone Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Mobile */}
-                <FormField
-                  control={form.control}
-                  name="mobile"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 flex items-center">
-                        Mobile <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
-                      <div className="flex">
-                        <div className="flex items-center justify-center w-20 h-10 bg-gray-100 border border-[#F2F2F2] rounded-l-md px-2">
-                          <span className="flex items-center">
-                            <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-1 h-3" />
-                            +44
-                          </span>
-                        </div>
-                        <FormControl>
-                          <Input
-                            type="tel"
-                            placeholder="Enter mobile number"
-                            {...field}
-                            className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
-                        </FormControl>
+              {/* Mobile - Single row */}
+              <FormField
+                control={form.control}
+                name="mobile"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      Mobile <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <div className="flex">
+                      <div className="flex items-center justify-center w-20 h-10 bg-gray-100 border border-[#F2F2F2] rounded-l-md px-2">
+                        <span className="flex items-center">
+                          <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-1 h-3" />
+                          +44
+                        </span>
                       </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      <FormControl>
+                        <Input
+                          type="tel"
+                          placeholder="Enter mobile number"
+                          {...field}
+                          className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                {/* Landline */}
-                <FormField
-                  control={form.control}
-                  name="landline"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 flex items-center">
-                        Landline <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
-                      <div className="flex">
-                        <div className="flex items-center justify-center w-20 h-10 bg-gray-100 border border-[#F2F2F2] rounded-l-md px-2">
-                          <span className="flex items-center">
-                            <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-1 h-3" />
-                            +44
-                          </span>
-                        </div>
-                        <FormControl>
-                          <Input
-                            type="tel"
-                            placeholder="Enter landline number"
-                            {...field}
-                            className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
-                        </FormControl>
+              {/* Landline - Single row */}
+              <FormField
+                control={form.control}
+                name="landline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      Landline <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <div className="flex">
+                      <div className="flex items-center justify-center w-20 h-10 bg-gray-100 border border-[#F2F2F2] rounded-l-md px-2">
+                        <span className="flex items-center">
+                          <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-1 h-3" />
+                          +44
+                        </span>
                       </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                      <FormControl>
+                        <Input
+                          type="tel"
+                          placeholder="Enter landline number"
+                          {...field}
+                          className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Occupation */}
               <FormField
@@ -360,69 +385,64 @@ export const PersonalDetailsForm = ({
             <h2 className="text-xl font-bold text-[#FFCF00] mb-6">YOUR ADDRESS</h2>
             
             <div className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Country */}
-                <div className="md:col-span-2">
-                  <FormField
-                    control={form.control}
-                    name="country"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700">Country</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
-                              <div className="flex items-center">
-                                <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-2 h-3" />
-                                <SelectValue placeholder="Select country" />
-                              </div>
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="United Kingdom">
-                              <div className="flex items-center">
-                                <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-2 h-3" />
-                                United Kingdom
-                              </div>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+              {/* Country - Single row */}
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Country</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {countries.map((country) => (
+                          <SelectItem key={country.code} value={country.name}>
+                            <div className="flex items-center">
+                              <img src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} alt={country.code} className="mr-2 h-3" />
+                              {country.name}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                {/* Postcode */}
-                <div className="relative">
-                  <FormField
-                    control={form.control}
-                    name="postcode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 flex items-center">
-                          Postcode <span className="text-red-500 ml-1">*</span>
-                        </FormLabel>
-                        <div className="flex">
-                          <FormControl>
-                            <Input
-                              placeholder="Enter postcode"
-                              {...field}
-                              className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                            />
-                          </FormControl>
-                          <Button 
-                            type="button" 
-                            className="ml-2 bg-[#FFCF00] hover:bg-[#FFCC00]/90 text-black"
-                          >
-                            FIND ADDRESS
-                          </Button>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+              {/* Postcode - Single row */}
+              <div className="relative">
+                <FormField
+                  control={form.control}
+                  name="postcode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        Postcode <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <div className="flex">
+                        <FormControl>
+                          <Input
+                            placeholder="Enter postcode"
+                            {...field}
+                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                          />
+                        </FormControl>
+                        <Button 
+                          type="button" 
+                          className="ml-2 bg-[#FFCF00] hover:bg-[#FFCC00]/90 text-black"
+                        >
+                          FIND ADDRESS
+                        </Button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               {/* Address Fields */}
@@ -543,49 +563,160 @@ export const PersonalDetailsForm = ({
             
             {activeRecipient === "other" && (
               <div className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* First Name */}
-                  <FormField
-                    control={form.control}
-                    name="recipientFirstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 flex items-center">
-                          First name <span className="text-red-500 ml-1">*</span>
-                        </FormLabel>
+                {/* Title */}
+                <FormField
+                  control={form.control}
+                  name="recipientTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        Title <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <Input
-                            placeholder="Enter first name"
-                            {...field}
-                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
+                          <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
+                            <SelectValue placeholder="Select title" />
+                          </SelectTrigger>
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                        <SelectContent>
+                          <SelectItem value="Mr">Mr</SelectItem>
+                          <SelectItem value="Mrs">Mrs</SelectItem>
+                          <SelectItem value="Ms">Ms</SelectItem>
+                          <SelectItem value="Miss">Miss</SelectItem>
+                          <SelectItem value="Master">Master</SelectItem>
+                          <SelectItem value="Lord">Lord</SelectItem>
+                          <SelectItem value="Lady">Lady</SelectItem>
+                          <SelectItem value="Sir">Sir</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  {/* Last Name */}
-                  <FormField
-                    control={form.control}
-                    name="recipientLastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 flex items-center">
-                          Last name <span className="text-red-500 ml-1">*</span>
-                        </FormLabel>
+                {/* First Name */}
+                <FormField
+                  control={form.control}
+                  name="recipientFirstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        First name <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter first name"
+                          {...field}
+                          className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Last Name */}
+                <FormField
+                  control={form.control}
+                  name="recipientLastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        Last name <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter last name"
+                          {...field}
+                          className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Email */}
+                <FormField
+                  control={form.control}
+                  name="recipientEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        Email <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="Enter email address"
+                          {...field}
+                          className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Mobile */}
+                <FormField
+                  control={form.control}
+                  name="recipientMobile"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        Mobile <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <div className="flex">
+                        <div className="flex items-center justify-center w-20 h-10 bg-gray-100 border border-[#F2F2F2] rounded-l-md px-2">
+                          <span className="flex items-center">
+                            <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-1 h-3" />
+                            +44
+                          </span>
+                        </div>
                         <FormControl>
                           <Input
-                            placeholder="Enter last name"
+                            type="tel"
+                            placeholder="Enter mobile number"
                             {...field}
-                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                            className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
                           />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Landline */}
+                <FormField
+                  control={form.control}
+                  name="recipientLandline"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 flex items-center">
+                        Landline <span className="text-red-500 ml-1">*</span>
+                      </FormLabel>
+                      <div className="flex">
+                        <div className="flex items-center justify-center w-20 h-10 bg-gray-100 border border-[#F2F2F2] rounded-l-md px-2">
+                          <span className="flex items-center">
+                            <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-1 h-3" />
+                            +44
+                          </span>
+                        </div>
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            placeholder="Enter landline number"
+                            {...field}
+                            className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Date of Birth */}
@@ -659,12 +790,14 @@ export const PersonalDetailsForm = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="British">
-                            <div className="flex items-center">
-                              <img src="https://flagcdn.com/w20/gb.png" alt="UK" className="mr-2 h-3" />
-                              British
-                            </div>
-                          </SelectItem>
+                          {countries.map((country) => (
+                            <SelectItem key={country.code} value={country.name}>
+                              <div className="flex items-center">
+                                <img src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} alt={country.code} className="mr-2 h-3" />
+                                {country.name}
+                              </div>
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -740,7 +873,7 @@ export const PersonalDetailsForm = ({
                   <div className="space-y-4 pt-2">
                     <FormField
                       control={form.control}
-                      name="addressLine1"
+                      name="recipientAddressLine1"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-700">Address line 1</FormLabel>
@@ -758,7 +891,7 @@ export const PersonalDetailsForm = ({
                     
                     <FormField
                       control={form.control}
-                      name="addressLine2"
+                      name="recipientAddressLine2"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-700">Address line 2</FormLabel>
@@ -776,7 +909,7 @@ export const PersonalDetailsForm = ({
                     
                     <FormField
                       control={form.control}
-                      name="addressLine3"
+                      name="recipientAddressLine3"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className="text-gray-700">Address line 3</FormLabel>
@@ -796,6 +929,8 @@ export const PersonalDetailsForm = ({
 
                 {/* SPECIAL REQUIREMENTS */}
                 <div className="pt-4 space-y-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Special Requirements</h3>
+                  
                   {/* Disability */}
                   <FormField
                     control={form.control}
