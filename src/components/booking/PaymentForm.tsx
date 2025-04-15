@@ -93,7 +93,7 @@ export const PaymentForm = ({ selections, onContinue, onBack }: PaymentFormProps
           Please enter your card details to complete your payment. You may be redirected to your bank provider to verify your details.
         </p>
         <div className="flex items-center space-x-2 mt-2">
-          <img src="/lovable-uploads/b1889361-5b6b-4969-b547-75f9eaf77f9f.png" alt="Payment methods" className="h-6" />
+          <CreditCard className="h-6 w-6 text-gray-500" />
         </div>
         <div className="space-y-3 mt-4">
           <div>
