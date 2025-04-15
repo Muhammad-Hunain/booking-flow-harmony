@@ -22,10 +22,10 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
               <div
                 className={`flex items-center justify-center w-8 h-8 rounded-full z-10 ${
                   step.completed
-                    ? "bg-amber-500 text-white"
+                    ? "bg-[#FFCF00] text-white"
                     : step.current
-                    ? "bg-amber-500 text-white"
-                    : "bg-gray-300 text-gray-600"
+                    ? "bg-[#119142] text-white"
+                    : "bg-black text-white"
                 }`}
               >
                 {step.completed ? (
@@ -37,7 +37,7 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
               
               <span
                 className={`text-[10px] font-medium mt-2 text-center uppercase ${
-                  step.current || step.completed ? "text-amber-500" : "text-gray-400"
+                  step.current || step.completed ? "text-[#FFCF00]" : "text-gray-400"
                 }`}
               >
                 {step.name}
@@ -48,7 +48,7 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
               <div 
                 className={`h-0.5 flex-1 ${
                   steps[index + 1].completed || steps[index + 1].current || step.completed
-                    ? "bg-amber-500" 
+                    ? "bg-[#FFCF00]" 
                     : "bg-gray-200"
                 }`}
               />

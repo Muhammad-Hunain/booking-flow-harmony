@@ -9,6 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { addDays, format } from "date-fns";
 
 export const ServiceSelection = ({
   onContinue,
@@ -17,7 +20,13 @@ export const ServiceSelection = ({
 }) => {
   const [location, setLocation] = useState("");
   const [serviceType, setServiceType] = useState("");
-  const [dates, setDates] = useState("");
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
+    from: undefined,
+    to: undefined,
+  });
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(1);
   const [showRecipientOptions, setShowRecipientOptions] = useState(false);
@@ -45,8 +54,6 @@ export const ServiceSelection = ({
     "Mentor/Companion",
     "Governess"
   ];
-  
-  const dateOptions = ["1 Dec – 7 Dec", "8 Dec – 14 Dec", "15 Dec – 21 Dec", "22 Dec – 28 Dec"];
   
   const incrementAdults = () => {
     if (adults + children < 2) {
@@ -82,6 +89,14 @@ export const ServiceSelection = ({
       parts.push(`${children} Child${children !== 1 ? 'ren' : ''}`);
     }
     return parts.join(', ');
+  };
+
+  // Format date range display
+  const getDateRangeDisplay = () => {
+    if (dateRange.from && dateRange.to) {
+      return `${format(dateRange.from, "d MMM")} – ${format(dateRange.to, "d MMM")}`;
+    }
+    return "";
   };
   
   const toggleRecipientOptions = () => {
@@ -157,23 +172,28 @@ export const ServiceSelection = ({
         </div>
         
         <div className="grid grid-cols-2 gap-4">
-          {/* Date Selection */}
+          {/* Date Range Picker */}
           <div className="border border-amber-300 rounded-lg overflow-hidden">
-            <Select value={dates} onValueChange={setDates}>
-              <SelectTrigger className="bg-white border-none h-12 px-4 flex">
-                <div className="flex items-center">
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="bg-white h-12 px-4 flex items-center cursor-pointer">
                   <Calendar size={20} className="mr-3 text-gray-700" />
-                  <SelectValue placeholder="Date" />
+                  <span className={`${getDateRangeDisplay() ? "" : "text-gray-400"}`}>
+                    {getDateRangeDisplay() || "Select dates"}
+                  </span>
                 </div>
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                {dateOptions.map((date) => (
-                  <SelectItem key={date} value={date}>
-                    {date}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <CalendarComponent
+                  mode="range"
+                  defaultMonth={new Date()}
+                  selected={dateRange}
+                  onSelect={setDateRange}
+                  numberOfMonths={2}
+                  className="pointer-events-auto"
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           
           {/* Service Recipient */}
@@ -266,7 +286,6 @@ export const ServiceSelection = ({
             <Button
               variant="default"
               className="w-full bg-black text-white py-3 h-auto rounded-md hover:bg-black/90"
-              disabled={!serviceType || !location || !dates || (adults === 0 && children === 0)}
               onClick={() => setShowRecipientOptions(false)}
             >
               DONE
@@ -279,7 +298,7 @@ export const ServiceSelection = ({
       <Button 
         onClick={onContinue} 
         className="font-semibold w-full py-5 h-auto text-white bg-black hover:bg-black/90 rounded-md"
-        disabled={!location || !serviceType || !dates || (adults === 0 && children === 0)}
+        disabled={!location || !serviceType || !dateRange.from || !dateRange.to || (adults === 0 && children === 0)}
       >
         BOOK NOW
       </Button>

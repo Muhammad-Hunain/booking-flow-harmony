@@ -2,20 +2,37 @@
 import { MapPin, Users, Calendar, User, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SelectionTag } from "./SelectionTag";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface PriceLineProps {
   label: string;
   value: string;
-  showInfoIcon?: boolean;
+  tooltipContent?: string;
   className?: string;
 }
 
-const PriceLine = ({ label, value, showInfoIcon = true, className }: PriceLineProps) => (
+const PriceLine = ({ label, value, tooltipContent, className }: PriceLineProps) => (
   <div className={`flex items-center justify-between py-2 ${className || ""}`}>
     <div className="flex items-center">
       <span className="text-gray-700">{label}</span>
-      {showInfoIcon && (
-        <Info size={16} className="ml-2 text-gray-500 cursor-help" />
+      {tooltipContent && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button className="ml-2 focus:outline-none">
+                <Info size={16} className="text-gray-500" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-xs bg-white">
+              <p className="text-xs">{tooltipContent}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </div>
     <span className="font-medium text-gray-800">{value}</span>
@@ -70,23 +87,37 @@ export const PricingBreakdown = ({
         
         <div className="bg-gray-100/70 rounded-lg p-5 mb-5">
           <div className="space-y-1 divide-y divide-gray-200">
-            <PriceLine label="Day Rate" value="£220.00 per day" />
-            <PriceLine label="Travel Cost" value="£30.00 per day" />
-            <PriceLine label="Accommodation" value="N/A" />
-            <PriceLine label="Food Allowance" value="£30.00 per day" />
+            <PriceLine 
+              label="Day Rate" 
+              value="£220.00 per day" 
+              tooltipContent="Learning Hubb's day rate based on 8 hours per day"
+            />
+            <PriceLine 
+              label="Travel Cost" 
+              value="£30.00 per day" 
+              tooltipContent="Learning Hubb's travel costs to and from your chosen location"
+            />
+            <PriceLine 
+              label="Accommodation" 
+              value="N/A" 
+              tooltipContent="Accommodation for Learning Hubb employees based on your chosen location"
+            />
+            <PriceLine 
+              label="Food Allowance" 
+              value="£30.00 per day" 
+              tooltipContent="Learning Hubb's food allowance rate per day"
+            />
           </div>
           
           <div className="pt-4 mt-3">
             <PriceLine 
               label="Total" 
               value="£280.00 per day" 
-              showInfoIcon={false}
               className="font-medium"
             />
             <PriceLine 
               label="Your booking" 
               value="7 days" 
-              showInfoIcon={false}
             />
             <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
               <span className="text-lg font-bold text-gray-800">Total booking</span>

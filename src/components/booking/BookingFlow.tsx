@@ -7,6 +7,7 @@ import { PersonalDetailsForm } from "./PersonalDetailsForm";
 import { PaymentForm } from "./PaymentForm";
 import { BookingConfirmation } from "./BookingConfirmation";
 import { Card } from "@/components/ui/card";
+import { format } from "date-fns";
 
 const STEPS: Step[] = [
   { id: 1, name: "Book a Service", completed: false, current: true },
@@ -25,7 +26,11 @@ export const BookingFlow = () => {
     dates: "",
     adults: 1,
     children: 0,
-    group: "1 Adult"
+    group: "1 Adult",
+    dateRange: {
+      from: undefined as Date | undefined,
+      to: undefined as Date | undefined
+    }
   });
   
   // Generate a booking reference based on location
@@ -79,10 +84,37 @@ export const BookingFlow = () => {
     }));
   };
 
+  // Handle service selection completion
+  const handleServiceSelectionComplete = (data: any) => {
+    // Format date range for display
+    let dateRangeDisplay = "";
+    if (data.dateRange?.from && data.dateRange?.to) {
+      dateRangeDisplay = `${format(data.dateRange.from, "d MMM")} – ${format(data.dateRange.to, "d MMM")}`;
+    }
+    
+    // Format group display
+    let groupDisplay = "";
+    if (data.adults > 0 && data.children > 0) {
+      groupDisplay = `${data.adults} Adult, ${data.children} Child${data.children !== 1 ? 'ren' : ''}`;
+    } else if (data.adults > 0) {
+      groupDisplay = `${data.adults} Adult${data.adults !== 1 ? 's' : ''}`;
+    } else if (data.children > 0) {
+      groupDisplay = `${data.children} Child${data.children !== 1 ? 'ren' : ''}`;
+    }
+    
+    updateSelections({
+      ...data,
+      dates: dateRangeDisplay,
+      group: groupDisplay
+    });
+    
+    handleNextStep();
+  };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <ServiceSelection onContinue={handleNextStep} />;
+        return <ServiceSelection onContinue={handleServiceSelectionComplete} />;
       case 2:
         return <PricingBreakdown selections={selections} onContinue={handleNextStep} />;
       case 3:
