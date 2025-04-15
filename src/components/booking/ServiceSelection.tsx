@@ -20,6 +20,7 @@ export const ServiceSelection = ({
   const [dates, setDates] = useState("");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(1);
+  const [showRecipientOptions, setShowRecipientOptions] = useState(false);
   
   const locations = [
     "London - Belgravia",
@@ -81,6 +82,10 @@ export const ServiceSelection = ({
       parts.push(`${children} Child${children !== 1 ? 'ren' : ''}`);
     }
     return parts.join(', ');
+  };
+  
+  const toggleRecipientOptions = () => {
+    setShowRecipientOptions(!showRecipientOptions);
   };
   
   return (
@@ -173,102 +178,102 @@ export const ServiceSelection = ({
           
           {/* Service Recipient */}
           <div className="border border-amber-300 rounded-lg overflow-hidden">
-            <SelectTrigger
-              className="bg-white border-none h-12 px-4 flex cursor-pointer"
-              onClick={() => {}}
+            <div 
+              className="bg-white h-12 px-4 flex items-center cursor-pointer"
+              onClick={toggleRecipientOptions}
             >
-              <div className="flex items-center">
-                <User size={20} className="mr-3 text-gray-700" />
-                <span className={`${getServiceRecipientDisplay() ? "" : "text-gray-400"}`}>
-                  {getServiceRecipientDisplay() || "Service recipient"}
-                </span>
-              </div>
-            </SelectTrigger>
+              <User size={20} className="mr-3 text-gray-700" />
+              <span className={`${getServiceRecipientDisplay() ? "" : "text-gray-400"}`}>
+                {getServiceRecipientDisplay() || "Service recipient"}
+              </span>
+            </div>
           </div>
         </div>
       </div>
       
       {/* Service Recipients counter */}
-      <div className="bg-gray-50 p-5 rounded-lg mb-8">
-        <div className="text-center mb-4">
-          <span className="inline-block px-3 py-1 bg-amber-100 rounded-full text-xs text-amber-800">
-            Max 2 per booking
-          </span>
-        </div>
-        
-        <div className="space-y-4">
-          {/* Adults counter */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-amber-300 rounded-full flex items-center justify-center">
-                <User size={14} className="text-white" />
+      {showRecipientOptions && (
+        <div className="bg-gray-50 p-5 rounded-lg mb-8">
+          <div className="text-center mb-4">
+            <span className="inline-block px-3 py-1 bg-amber-100 rounded-full text-xs text-amber-800">
+              Max 2 per booking
+            </span>
+          </div>
+          
+          <div className="space-y-4">
+            {/* Adults counter */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-amber-300 rounded-full flex items-center justify-center">
+                  <User size={14} className="text-white" />
+                </div>
+                <span className="text-sm font-medium">Adults <span className="text-xs text-gray-500">(18+ years)</span></span>
               </div>
-              <span className="text-sm font-medium">Adults <span className="text-xs text-gray-500">(18+ years)</span></span>
+              
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={decrementAdults}
+                  className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
+                  disabled={adults === 0}
+                >
+                  <Minus size={16} className="text-white" />
+                </button>
+                
+                <span className="font-medium w-4 text-center">{adults}</span>
+                
+                <button 
+                  onClick={incrementAdults}
+                  className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
+                  disabled={adults + children >= 2}
+                >
+                  <Plus size={16} className="text-white" />
+                </button>
+              </div>
             </div>
             
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={decrementAdults}
-                className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
-                disabled={adults === 0}
-              >
-                <Minus size={16} className="text-white" />
-              </button>
+            {/* Children counter */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-amber-300 rounded-full flex items-center justify-center">
+                  <User size={14} className="text-white" />
+                </div>
+                <span className="text-sm font-medium">Children <span className="text-xs text-gray-500">(7-17 years)</span></span>
+              </div>
               
-              <span className="font-medium w-4 text-center">{adults}</span>
-              
-              <button 
-                onClick={incrementAdults}
-                className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
-                disabled={adults + children >= 2}
-              >
-                <Plus size={16} className="text-white" />
-              </button>
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={decrementChildren}
+                  className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
+                  disabled={children === 0}
+                >
+                  <Minus size={16} className="text-white" />
+                </button>
+                
+                <span className="font-medium w-4 text-center">{children}</span>
+                
+                <button 
+                  onClick={incrementChildren}
+                  className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
+                  disabled={adults + children >= 2}
+                >
+                  <Plus size={16} className="text-white" />
+                </button>
+              </div>
             </div>
           </div>
           
-          {/* Children counter */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-amber-300 rounded-full flex items-center justify-center">
-                <User size={14} className="text-white" />
-              </div>
-              <span className="text-sm font-medium">Children <span className="text-xs text-gray-500">(7-17 years)</span></span>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={decrementChildren}
-                className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
-                disabled={children === 0}
-              >
-                <Minus size={16} className="text-white" />
-              </button>
-              
-              <span className="font-medium w-4 text-center">{children}</span>
-              
-              <button 
-                onClick={incrementChildren}
-                className="w-7 h-7 rounded-full bg-amber-300 flex items-center justify-center"
-                disabled={adults + children >= 2}
-              >
-                <Plus size={16} className="text-white" />
-              </button>
-            </div>
+          <div className="mt-5">
+            <Button
+              variant="default"
+              className="w-full bg-black text-white py-3 h-auto rounded-md hover:bg-black/90"
+              disabled={!serviceType || !location || !dates || (adults === 0 && children === 0)}
+              onClick={() => setShowRecipientOptions(false)}
+            >
+              DONE
+            </Button>
           </div>
         </div>
-        
-        <div className="mt-5">
-          <Button
-            variant="default"
-            className="w-full bg-black text-white py-3 h-auto rounded-md hover:bg-black/90"
-            disabled={!serviceType || !location || !dates || (adults === 0 && children === 0)}
-            onClick={() => {}}
-          >
-            DONE
-          </Button>
-        </div>
-      </div>
+      )}
       
       {/* Book Now Button */}
       <Button 
