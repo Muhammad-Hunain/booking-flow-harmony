@@ -17,16 +17,16 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
     <div className="w-full mb-8">
       <div className="flex items-center">
         {steps.map((step, index) => (
-          <div key={step.id} className="flex flex-1 items-center justify-center">
-            <div className="flex flex-col items-center relative">
+          <div key={step.id} className="flex flex-1 items-center">
+            <div className="flex flex-col items-center">
               <div
-                className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                className={`flex items-center justify-center w-8 h-8 rounded-full z-10 ${
                   step.completed
                     ? "bg-amber-500 text-white"
                     : step.current
                     ? "bg-green-500 text-white"
                     : "bg-gray-300 text-white"
-                } z-10`}
+                }`}
               >
                 {step.completed ? (
                   <Check className="w-4 h-4" />
@@ -46,7 +46,7 @@ export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
             
             {index < steps.length - 1 && (
               <div 
-                className={`h-0.5 flex-1 mx-1 ${
+                className={`h-0.5 flex-1 ${
                   steps[index + 1].completed || steps[index + 1].current 
                     ? "bg-amber-500" 
                     : "bg-gray-200"

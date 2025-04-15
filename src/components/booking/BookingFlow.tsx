@@ -4,7 +4,6 @@ import { BookingProgressBar, Step } from "./BookingProgressBar";
 import { ServiceSelection } from "./ServiceSelection";
 import { PricingBreakdown } from "./PricingBreakdown";
 import { PersonalDetailsForm } from "./PersonalDetailsForm";
-import { ServiceRecipientForm } from "./ServiceRecipientForm";
 import { PaymentForm } from "./PaymentForm";
 import { Card } from "@/components/ui/card";
 
