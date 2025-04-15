@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AlertCircle, Info, Stripe } from "lucide-react";
+import { AlertCircle, Info, CreditCard } from "lucide-react";
 
 interface PaymentFormProps {
   selections: {
@@ -132,7 +132,11 @@ export const PaymentForm = ({ selections, onContinue, onBack }: PaymentFormProps
           Please enter your card details to complete your payment. You may be redirected to your bank provider to verify your details.
         </p>
         <div className="flex items-center space-x-2 mt-2">
-          <Stripe className="h-6 w-6 text-[#635BFF]" />
+          {/* Using a custom Stripe logo instead of an icon from lucide-react */}
+          <div className="flex items-center">
+            <CreditCard className="h-6 w-6 text-[#635BFF]" />
+            <span className="ml-2 font-semibold text-[#635BFF]">Stripe</span>
+          </div>
         </div>
         <div className="space-y-3 mt-4">
           <div>

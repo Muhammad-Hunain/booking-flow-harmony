@@ -84,7 +84,7 @@ export const BookingFlow = () => {
     }));
   };
 
-  // Handle service selection completion - fixed type signature to accept a parameter
+  // Fixed type signature to match the expected call pattern
   const handleServiceSelectionComplete = (data: any) => {
     // Format date range for display
     let dateRangeDisplay = "";
