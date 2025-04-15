@@ -1,7 +1,5 @@
-
 import { MapPin, Calendar, User, Clock, ChevronDown, Mail, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 interface BookingConfirmationProps {
   selections: {
     location: string;
@@ -12,28 +10,18 @@ interface BookingConfirmationProps {
   bookingReference: string;
   onNewBooking: () => void;
 }
-
-export const BookingConfirmation = ({ 
-  selections, 
+export const BookingConfirmation = ({
+  selections,
   bookingReference,
-  onNewBooking 
+  onNewBooking
 }: BookingConfirmationProps) => {
-  
-  return (
-    <div className="flex flex-col items-center space-y-5">
+  return <div className="flex flex-col items-center space-y-5">
       {/* Success Icons */}
       <div className="flex items-center justify-center space-x-1 mb-2">
-        {[1, 2, 3, 4, 5].map((step) => (
-          <div 
-            key={step} 
-            className="flex items-center"
-          >
-            <div className="rounded-full bg-amber-500 text-white w-6 h-6 flex items-center justify-center text-xs">
-              ✓
-            </div>
-            {step < 5 && <div className="w-4 h-0.5 bg-amber-500"></div>}
-          </div>
-        ))}
+        {[1, 2, 3, 4, 5].map(step => <div key={step} className="flex items-center">
+            
+            {step < 5}
+          </div>)}
       </div>
       
       {/* Confirmation Header */}
@@ -225,13 +213,9 @@ export const BookingConfirmation = ({
       
       {/* New Booking Button */}
       <div className="w-full flex justify-center pt-4">
-        <Button 
-          onClick={onNewBooking}
-          className="px-6 py-2 rounded-md bg-amber-100 text-amber-900 hover:bg-amber-200"
-        >
+        <Button onClick={onNewBooking} className="px-6 py-2 rounded-md bg-amber-100 text-amber-900 hover:bg-amber-200">
           Make a New Booking
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 };
