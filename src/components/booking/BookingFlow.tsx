@@ -116,7 +116,7 @@ export const BookingFlow = () => {
       case 1:
         return <ServiceSelection onContinue={handleServiceSelectionComplete} />;
       case 2:
-        return <PricingBreakdown selections={selections} onContinue={handleNextStep} />;
+        return <PricingBreakdown selections={selections} onContinue={handleNextStep} onBack={handlePreviousStep} />;
       case 3:
         return <PersonalDetailsForm selections={selections} onContinue={handleNextStep} onBack={handlePreviousStep} />;
       case 4:
