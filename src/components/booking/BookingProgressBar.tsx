@@ -1,5 +1,5 @@
 
-import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 export type Step = {
   id: number;
@@ -14,68 +14,49 @@ interface BookingProgressBarProps {
 
 export const BookingProgressBar = ({ steps }: BookingProgressBarProps) => {
   return (
-    <nav aria-label="Booking progress" className="w-full py-6">
-      <ol className="flex items-center justify-center w-full space-x-2 sm:space-x-4">
+    <div className="w-full mb-8">
+      <div className="flex items-center justify-between">
         {steps.map((step, index) => (
-          <li
-            key={step.id}
-            className={cn(
-              "flex items-center space-x-2 sm:space-x-4",
-              index < steps.length - 1 ? "flex-1" : ""
-            )}
-          >
-            <div className="flex flex-col items-center">
-              <div
-                className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300",
-                  step.current
-                    ? "border-bookingAccent bg-white text-bookingAccent"
-                    : step.completed
-                    ? "border-bookingAccent bg-bookingAccent text-white"
-                    : "border-gray-300 bg-white text-gray-300"
-                )}
-              >
-                {step.completed ? (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                ) : (
-                  <span className="text-sm font-bold">{step.id}</span>
-                )}
-              </div>
-              <span
-                className={cn(
-                  "mt-2 text-sm font-medium",
-                  step.current ? "text-bookingAccent" : "text-bookingMuted"
-                )}
-              >
-                {step.name}
-              </span>
+          <div key={step.id} className="flex flex-col items-center">
+            <div
+              className={`flex items-center justify-center w-6 h-6 rounded-full ${
+                step.completed
+                  ? "bg-amber-500 text-white"
+                  : step.current
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-300 text-white"
+              }`}
+            >
+              {step.completed ? (
+                <Check className="w-4 h-4" />
+              ) : (
+                <span className="text-xs"></span>
+              )}
             </div>
+            
             {index < steps.length - 1 && (
               <div
-                className={cn(
-                  "flex-1 h-0.5 transition-colors duration-300",
-                  steps[index + 1].completed || steps[index + 1].current
-                    ? "bg-bookingAccent"
-                    : "bg-gray-200"
-                )}
+                className={`h-0.5 w-10 sm:w-16 mt-3 ${
+                  step.completed ? "bg-black" : "bg-gray-200"
+                }`}
+                style={{ 
+                  position: "absolute", 
+                  left: `calc(${((index + 0.5) / steps.length) * 100}% - 20px)`,
+                  width: `calc(${100 / steps.length}% - 20px)`
+                }}
               ></div>
             )}
-          </li>
+            
+            <span
+              className={`text-[10px] font-semibold mt-2 ${
+                step.current || step.completed ? "text-amber-500" : "text-gray-400"
+              }`}
+            >
+              {step.name}
+            </span>
+          </div>
         ))}
-      </ol>
-    </nav>
+      </div>
+    </div>
   );
 };

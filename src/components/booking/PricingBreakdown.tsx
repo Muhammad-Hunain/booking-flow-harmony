@@ -1,8 +1,7 @@
 
 import { MapPin, Users, Calendar, User, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { SelectionTag } from "./SelectionTag";
 
 interface PriceLineProps {
   label: string;
@@ -12,113 +11,97 @@ interface PriceLineProps {
 }
 
 const PriceLine = ({ label, value, showInfoIcon = true, className }: PriceLineProps) => (
-  <div className={cn("flex items-center justify-between py-2", className)}>
+  <div className={`flex items-center justify-between py-2 ${className || ""}`}>
     <div className="flex items-center">
-      <span className="text-bookingText">{label}</span>
+      <span className="text-gray-700">{label}</span>
       {showInfoIcon && (
-        <Info size={16} className="ml-2 text-bookingMuted cursor-help" />
+        <Info size={16} className="ml-2 text-gray-500 cursor-help" />
       )}
     </div>
-    <span className="font-medium text-bookingText">{value}</span>
+    <span className="font-medium text-gray-800">{value}</span>
   </div>
 );
 
-const ServiceSummary = ({
-  title,
-  icon,
-  value,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  value: string;
-}) => {
-  return (
-    <div className="flex items-center border-b border-gray-100 py-3">
-      <div className="flex-shrink-0 text-bookingText opacity-70 mr-3">
-        {icon}
-      </div>
-      <div className="flex flex-col">
-        <p className="text-xs text-bookingMuted">{title}</p>
-        <p className="font-medium text-bookingText">{value}</p>
-      </div>
-    </div>
-  );
-};
-
 export const PricingBreakdown = ({
+  selections,
   onContinue,
 }: {
+  selections: {
+    location: string;
+    serviceType: string;
+    dates: string;
+    group: string;
+  };
   onContinue: () => void;
 }) => {
   return (
     <div className="w-full">
-      <h2 className="text-xl font-bold text-center mb-6 text-bookingText">
-        Pricing Breakdown
+      <h2 className="text-2xl font-bold text-center mb-4 text-black">
+        PRICE BREAKDOWN
       </h2>
       
-      {/* Selection Summary */}
-      <div className="mb-6">
-        <ServiceSummary 
-          title="Location" 
-          icon={<MapPin size={20} />} 
-          value="Leeds - City Centre" 
+      {/* Selection Tags */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <SelectionTag 
+          icon={<MapPin size={18} />} 
+          label="Location" 
+          value={selections.location} 
         />
-        <ServiceSummary 
-          title="Service Type" 
-          icon={<Users size={20} />} 
-          value="Mentor/Companion" 
+        <SelectionTag 
+          icon={<Users size={18} />} 
+          label="Service Type" 
+          value={selections.serviceType} 
         />
-        <ServiceSummary 
-          title="Dates" 
-          icon={<Calendar size={20} />} 
-          value="1 Dec – 7 Dec" 
+        <SelectionTag 
+          icon={<Calendar size={18} />} 
+          label="Dates" 
+          value={selections.dates} 
         />
-        <ServiceSummary 
-          title="Group" 
-          icon={<User size={20} />} 
-          value="1 Adult, 1 Child" 
+        <SelectionTag 
+          icon={<User size={18} />} 
+          label="Group" 
+          value={selections.group} 
         />
       </div>
       
       {/* Pricing Card */}
-      <div className="bg-white rounded-lg p-5 border border-gray-100">
-        <h3 className="text-lg font-bold mb-4 text-bookingText">Our Rates Explained</h3>
+      <div>
+        <h3 className="text-lg font-semibold mb-4 text-center">OUR RATES EXPLAINED</h3>
         
-        <div className="space-y-1 mb-5 divide-y divide-gray-100">
-          <PriceLine label="Day Rate" value="£220.00 per day" />
-          <PriceLine label="Travel Cost" value="£30.00 per day" />
-          <PriceLine label="Accommodation" value="N/A" />
-          <PriceLine label="Food Allowance" value="£30.00 per day" />
-        </div>
-        
-        <div className="pt-3 border-t border-gray-200">
-          <PriceLine 
-            label="Total Per Day" 
-            value="£280.00" 
-            showInfoIcon={false}
-            className="font-medium"
-          />
-          <PriceLine 
-            label="Duration" 
-            value="7 days" 
-            showInfoIcon={false}
-          />
-          <PriceLine 
-            label="Total Booking Cost" 
-            value="£1,960.00" 
-            showInfoIcon={false}
-            className="text-lg font-bold"
-          />
+        <div className="bg-gray-100/70 rounded-lg p-5 mb-5">
+          <div className="space-y-1 divide-y divide-gray-200">
+            <PriceLine label="Day Rate" value="£220.00 per day" />
+            <PriceLine label="Travel Cost" value="£30.00 per day" />
+            <PriceLine label="Accommodation" value="N/A" />
+            <PriceLine label="Food Allowance" value="£30.00 per day" />
+          </div>
+          
+          <div className="pt-4 mt-3">
+            <PriceLine 
+              label="Total" 
+              value="£280.00 per day" 
+              showInfoIcon={false}
+              className="font-medium"
+            />
+            <PriceLine 
+              label="Your booking" 
+              value="7 days" 
+              showInfoIcon={false}
+            />
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+              <span className="text-lg font-bold text-gray-800">Total booking</span>
+              <span className="text-xl font-bold text-gray-800">£1,960.00</span>
+            </div>
+          </div>
         </div>
       </div>
       
       <div className="mt-6">
         <Button 
           onClick={onContinue} 
-          variant="booking"
-          className="font-medium w-full py-5 h-auto"
+          className="font-semibold w-full py-5 h-auto text-white bg-black hover:bg-black/90 rounded-md"
         >
-          Continue
+          CONTINUE
         </Button>
       </div>
     </div>

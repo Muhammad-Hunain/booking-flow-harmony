@@ -2,7 +2,6 @@
 import { MapPin, Users, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -16,10 +15,10 @@ export const ServiceSelection = ({
 }: {
   onContinue: () => void;
 }) => {
-  const [location, setLocation] = useState("Leeds - City Centre");
-  const [serviceType, setServiceType] = useState("Mentor/Companion");
-  const [dates, setDates] = useState("1 Dec – 7 Dec");
-  const [group, setGroup] = useState("1 Adult, 1 Child");
+  const [location, setLocation] = useState("");
+  const [serviceType, setServiceType] = useState("");
+  const [dates, setDates] = useState("");
+  const [group, setGroup] = useState("");
   
   const locations = ["Leeds - City Centre", "Manchester", "York", "Sheffield"];
   const serviceTypes = ["Mentor/Companion", "Caregiver", "Tutor", "Activity Partner"];
@@ -28,20 +27,26 @@ export const ServiceSelection = ({
   
   return (
     <div className="w-full">
-      <h2 className="text-xl font-bold text-center mb-6 text-bookingText">
-        Select Your Service
+      <h2 className="text-2xl font-bold text-center mb-4 text-black">
+        BOOK A SERVICE
       </h2>
       
-      <div className="space-y-6">
-        {/* Location Dropdown */}
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center mb-1">
-            <MapPin size={18} className="mr-2 text-bookingMuted" />
-            <label htmlFor="location" className="font-medium text-bookingText">Location</label>
-          </div>
+      <div className="h-2 bg-amber-300 rounded-full mb-6"></div>
+      
+      <div className="bg-blue-50/50 rounded-lg p-4 mb-8 text-sm text-center">
+        With 10+ Learning Hubb locations providing an unrivalled service across the UK, 
+        there's an experienced professional waiting wherever you need to be.
+      </div>
+      
+      <div className="space-y-4">
+        {/* Location Selection */}
+        <div className="border border-amber-300 rounded-lg overflow-hidden">
           <Select value={location} onValueChange={setLocation}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select location" />
+            <SelectTrigger className="bg-gray-100/80 border-none h-12 px-4 flex">
+              <div className="flex items-center">
+                <MapPin size={20} className="mr-3 text-gray-700" />
+                <SelectValue placeholder="Choose a location" />
+              </div>
             </SelectTrigger>
             <SelectContent className="bg-white">
               {locations.map((loc) => (
@@ -53,15 +58,14 @@ export const ServiceSelection = ({
           </Select>
         </div>
         
-        {/* Service Type Dropdown */}
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center mb-1">
-            <Users size={18} className="mr-2 text-bookingMuted" />
-            <label htmlFor="service" className="font-medium text-bookingText">Service Type</label>
-          </div>
+        {/* Service Type Selection */}
+        <div className="border border-amber-300 rounded-lg overflow-hidden">
           <Select value={serviceType} onValueChange={setServiceType}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select service type" />
+            <SelectTrigger className="bg-gray-100/80 border-none h-12 px-4 flex">
+              <div className="flex items-center">
+                <Users size={20} className="mr-3 text-gray-700" />
+                <SelectValue placeholder="Choose a service" />
+              </div>
             </SelectTrigger>
             <SelectContent className="bg-white">
               {serviceTypes.map((service) => (
@@ -73,54 +77,54 @@ export const ServiceSelection = ({
           </Select>
         </div>
         
-        {/* Dates Dropdown */}
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center mb-1">
-            <Calendar size={18} className="mr-2 text-bookingMuted" />
-            <label htmlFor="dates" className="font-medium text-bookingText">Dates</label>
+        <div className="grid grid-cols-2 gap-4">
+          {/* Date Selection */}
+          <div className="border border-amber-300 rounded-lg overflow-hidden">
+            <Select value={dates} onValueChange={setDates}>
+              <SelectTrigger className="bg-gray-100/80 border-none h-12 px-4 flex">
+                <div className="flex items-center">
+                  <Calendar size={20} className="mr-3 text-gray-700" />
+                  <SelectValue placeholder="Date" />
+                </div>
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                {dateOptions.map((date) => (
+                  <SelectItem key={date} value={date}>
+                    {date}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={dates} onValueChange={setDates}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select dates" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              {dateOptions.map((date) => (
-                <SelectItem key={date} value={date}>
-                  {date}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        {/* Group Dropdown */}
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center mb-1">
-            <User size={18} className="mr-2 text-bookingMuted" />
-            <label htmlFor="group" className="font-medium text-bookingText">Group</label>
+          
+          {/* Group Selection */}
+          <div className="border border-amber-300 rounded-lg overflow-hidden">
+            <Select value={group} onValueChange={setGroup}>
+              <SelectTrigger className="bg-gray-100/80 border-none h-12 px-4 flex">
+                <div className="flex items-center">
+                  <User size={20} className="mr-3 text-gray-700" />
+                  <SelectValue placeholder="Service recipient" />
+                </div>
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                {groupOptions.map((groupOpt) => (
+                  <SelectItem key={groupOpt} value={groupOpt}>
+                    {groupOpt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <Select value={group} onValueChange={setGroup}>
-            <SelectTrigger className="bg-white">
-              <SelectValue placeholder="Select group" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              {groupOptions.map((groupOpt) => (
-                <SelectItem key={groupOpt} value={groupOpt}>
-                  {groupOpt}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </div>
       
       <div className="mt-8">
         <Button 
           onClick={onContinue} 
-          variant="booking"
-          className="font-medium w-full py-5 h-auto"
+          className="font-semibold w-full py-5 h-auto text-white bg-black hover:bg-black/90 rounded-md"
+          disabled={!location || !serviceType || !dates || !group}
         >
-          Continue
+          BOOK NOW
         </Button>
       </div>
     </div>

@@ -1,6 +1,5 @@
 
 import { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 interface SelectionTagProps {
   icon: ReactNode;
@@ -12,17 +11,14 @@ interface SelectionTagProps {
 export const SelectionTag = ({ icon, label, value, className }: SelectionTagProps) => {
   return (
     <div 
-      className={cn(
-        "flex items-center gap-3 px-4 py-3 bg-bookingPill rounded-full shadow-sm border border-amber-100", 
-        className
-      )}
+      className={`flex items-center gap-2 px-3 py-2 bg-gray-100/70 rounded-lg border border-amber-200 ${className || ""}`}
     >
-      <div className="flex-shrink-0 text-bookingText opacity-70">
+      <div className="flex-shrink-0 text-gray-600">
         {icon}
       </div>
-      <div className="flex flex-col">
-        <p className="text-xs text-bookingMuted">{label}</p>
-        <p className="font-medium text-bookingText">{value}</p>
+      <div className="flex flex-col overflow-hidden">
+        <p className="text-[10px] text-gray-500 truncate">{label}</p>
+        <p className="text-xs font-medium text-gray-800 truncate">{value}</p>
       </div>
     </div>
   );
