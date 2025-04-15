@@ -14,13 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Info, Lock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Progress } from "@/components/ui/progress";
+import { RecipientForm } from "./RecipientForm";
 
 // Define form validation schema
 const formSchema = z.object({
@@ -375,493 +372,6 @@ export const PersonalDetailsForm = ({
     { code: "ZW", name: "Zimbabwe", dial: "+263" }
   ];
 
-  // Component for rendering service recipient fields - used for both recipients
-  const renderRecipientFields = (isSecondRecipient = false) => {
-    const prefix = isSecondRecipient ? "recipient" : "";
-    const titleName = isSecondRecipient ? "recipientTitle" : "title";
-    const firstNameName = isSecondRecipient ? "recipientFirstName" : "firstName";
-    const lastNameName = isSecondRecipient ? "recipientLastName" : "lastName";
-    const emailName = isSecondRecipient ? "recipientEmail" : "email";
-    const mobileName = isSecondRecipient ? "recipientMobile" : "mobile";
-    const mobileCountryCodeName = isSecondRecipient ? "recipientMobileCountryCode" : "mobileCountryCode";
-    const landlineName = isSecondRecipient ? "recipientLandline" : "landline";
-    const landlineCountryCodeName = isSecondRecipient ? "recipientLandlineCountryCode" : "landlineCountryCode";
-    const dobName = isSecondRecipient ? "recipientDateOfBirth" : "dateOfBirth";
-    const genderName = isSecondRecipient ? "recipientGender" : "gender";
-    const nationalityName = isSecondRecipient ? "recipientNationality" : "nationality";
-    const disabilityName = isSecondRecipient ? "recipientHasDisability" : "hasDisability";
-    const senName = isSecondRecipient ? "recipientHasSpecialEducationalNeed" : "hasSpecialEducationalNeed";
-    const allergyName = isSecondRecipient ? "recipientHasAllergy" : "hasAllergy";
-    const allergyDetailsName = isSecondRecipient ? "recipientAllergyDetails" : "allergyDetails";
-    const dietaryName = isSecondRecipient ? "recipientHasDietaryRequirement" : "hasDietaryRequirement";
-    
-    return (
-      <div className="space-y-5">
-        {/* Title */}
-        <FormField
-          control={form.control}
-          name={titleName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                Title <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
-                    <SelectValue placeholder="Select title" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="Mr">Mr</SelectItem>
-                  <SelectItem value="Mrs">Mrs</SelectItem>
-                  <SelectItem value="Ms">Ms</SelectItem>
-                  <SelectItem value="Miss">Miss</SelectItem>
-                  <SelectItem value="Master">Master</SelectItem>
-                  <SelectItem value="Lord">Lord</SelectItem>
-                  <SelectItem value="Lady">Lady</SelectItem>
-                  <SelectItem value="Sir">Sir</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* First Name */}
-        <FormField
-          control={form.control}
-          name={firstNameName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                First name <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter first name"
-                  {...field}
-                  className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Last Name */}
-        <FormField
-          control={form.control}
-          name={lastNameName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                Last name <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter last name"
-                  {...field}
-                  className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name={emailName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                Email <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  {...field}
-                  className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Mobile - With Country Code Selection */}
-        <FormField
-          control={form.control}
-          name={mobileName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                Mobile <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <div className="flex">
-                <Select 
-                  onValueChange={(value) => form.setValue(mobileCountryCodeName, value)} 
-                  defaultValue={form.getValues(mobileCountryCodeName)}
-                >
-                  <SelectTrigger className="w-32 border-[#F2F2F2] rounded-r-none">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-80">
-                    {countries.map((country) => (
-                      <SelectItem key={`mobile-${country.code}`} value={country.dial}>
-                        <div className="flex items-center">
-                          <img src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} alt={country.code} className="mr-2 h-3" />
-                          {country.dial}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormControl>
-                  <Input
-                    type="tel"
-                    placeholder="Enter mobile number"
-                    {...field}
-                    className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                  />
-                </FormControl>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Landline - With Country Code Selection */}
-        <FormField
-          control={form.control}
-          name={landlineName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                Landline <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <div className="flex">
-                <Select 
-                  onValueChange={(value) => form.setValue(landlineCountryCodeName, value)} 
-                  defaultValue={form.getValues(landlineCountryCodeName)}
-                >
-                  <SelectTrigger className="w-32 border-[#F2F2F2] rounded-r-none">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-80">
-                    {countries.map((country) => (
-                      <SelectItem key={`landline-${country.code}`} value={country.dial}>
-                        <div className="flex items-center">
-                          <img src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} alt={country.code} className="mr-2 h-3" />
-                          {country.dial}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormControl>
-                  <Input
-                    type="tel"
-                    placeholder="Enter landline number"
-                    {...field}
-                    className="rounded-l-none border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                  />
-                </FormControl>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {!isSecondRecipient && (
-          <>
-            {/* Occupation */}
-            <FormField
-              control={form.control}
-              name="occupation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 flex items-center">
-                    Occupation <span className="text-red-500 ml-1">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your occupation"
-                      {...field}
-                      className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Relationship to service recipient */}
-            <FormField
-              control={form.control}
-              name="relationshipToRecipient"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 flex items-center">
-                    Relationship to service recipient <span className="text-red-500 ml-1">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your relationship"
-                      {...field}
-                      className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Date of Birth */}
-          <FormField
-            control={form.control}
-            name={dobName}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-700 flex items-center">
-                  Date of birth <span className="text-red-500 ml-1">*</span>
-                </FormLabel>
-                <div className="flex items-center gap-2">
-                  <FormControl>
-                    <Input
-                      placeholder="DD/MM/YYYY"
-                      {...field}
-                      className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                    />
-                  </FormControl>
-                  <span className="text-sm text-gray-500">Years</span>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Gender */}
-          <FormField
-            control={form.control}
-            name={genderName}
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-gray-700 flex items-center">
-                  Gender <span className="text-red-500 ml-1">*</span>
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Male" id={`${prefix}male`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}male`} className="text-sm">Male</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Female" id={`${prefix}female`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}female`} className="text-sm">Female</label>
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Nationality */}
-        <FormField
-          control={form.control}
-          name={nationalityName}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-700 flex items-center">
-                Nationality <span className="text-red-500 ml-1">*</span>
-              </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
-                    <SelectValue placeholder="Select nationality" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="max-h-80">
-                  {countries.map((country) => (
-                    <SelectItem key={`nationality-${country.code}`} value={country.name}>
-                      <div className="flex items-center">
-                        <img src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} alt={country.code} className="mr-2 h-3" />
-                        {country.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* SPECIAL REQUIREMENTS */}
-        <div className="pt-4 space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800">Special Requirements</h3>
-          
-          {/* Disability */}
-          <FormField
-            control={form.control}
-            name={disabilityName}
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-gray-700 flex items-center">
-                  Does the service recipient have a: Disability? <span className="text-red-500 ml-1">*</span>
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Yes" id={`${prefix}disability-yes`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}disability-yes`} className="text-sm">Yes</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="No" id={`${prefix}disability-no`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}disability-no`} className="text-sm">No</label>
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Special Educational Need */}
-          <FormField
-            control={form.control}
-            name={senName}
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-gray-700 flex items-center">
-                  Special Educational Need? <span className="text-red-500 ml-1">*</span>
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Yes" id={`${prefix}sen-yes`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}sen-yes`} className="text-sm">Yes</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="No" id={`${prefix}sen-no`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}sen-no`} className="text-sm">No</label>
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Allergy */}
-          <FormField
-            control={form.control}
-            name={allergyName}
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-gray-700 flex items-center">
-                  Allergy? <span className="text-red-500 ml-1">*</span>
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Yes" id={`${prefix}allergy-yes`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}allergy-yes`} className="text-sm">Yes</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="No" id={`${prefix}allergy-no`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}allergy-no`} className="text-sm">No</label>
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Allergy details */}
-          {form.watch(allergyName) === "Yes" && (
-            <FormField
-              control={form.control}
-              name={allergyDetailsName}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700">
-                    If yes, please specify:
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter allergy details"
-                      {...field}
-                      className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                      maxLength={100}
-                    />
-                  </FormControl>
-                  <div className="text-xs text-gray-400 mt-1">Max 100 words</div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {/* Dietary Requirement */}
-          <FormField
-            control={form.control}
-            name={dietaryName}
-            render={({ field }) => (
-              <FormItem className="space-y-3">
-                <FormLabel className="text-gray-700 flex items-center">
-                  Dietary Requirement? <span className="text-red-500 ml-1">*</span>
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-4"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Yes" id={`${prefix}dietary-yes`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}dietary-yes`} className="text-sm">Yes</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="No" id={`${prefix}dietary-no`} className="border-[#F2F2F2]" />
-                      <label htmlFor={`${prefix}dietary-no`} className="text-sm">No</label>
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="w-full max-w-3xl mx-auto">
       {/* Security note */}
@@ -874,164 +384,6 @@ export const PersonalDetailsForm = ({
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {/* YOUR DETAILS SECTION */}
-          <div className="bg-white p-6 rounded-md border border-gray-200 mb-6">
-            <h2 className="text-xl font-bold text-[#FFCF00] mb-6">YOUR DETAILS</h2>
-            {renderRecipientFields(false)}
-          </div>
-
-          {/* YOUR ADDRESS SECTION */}
-          <div className="bg-white p-6 rounded-md border border-gray-200 mb-6">
-            <h2 className="text-xl font-bold text-[#FFCF00] mb-6">YOUR ADDRESS</h2>
-            
-            <div className="space-y-5">
-              {/* Country - Single row */}
-              <FormField
-                control={form.control}
-                name="country"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700">Country</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]">
-                          <SelectValue placeholder="Select country" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-80">
-                        {countries.map((country) => (
-                          <SelectItem key={country.code} value={country.name}>
-                            <div className="flex items-center">
-                              <img src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} alt={country.code} className="mr-2 h-3" />
-                              {country.name}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Postcode - Single row */}
-              <div className="relative">
-                <FormField
-                  control={form.control}
-                  name="postcode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 flex items-center">
-                        Postcode <span className="text-red-500 ml-1">*</span>
-                      </FormLabel>
-                      <div className="flex">
-                        <FormControl>
-                          <Input
-                            placeholder="Enter postcode"
-                            {...field}
-                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
-                        </FormControl>
-                        <Button 
-                          type="button" 
-                          className="ml-2 bg-[#FFCF00] hover:bg-[#FFCC00]/90 text-black"
-                        >
-                          FIND ADDRESS
-                        </Button>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Address Fields */}
-              <div className="pt-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={toggleAddressFields}
-                  className="text-[#FFCF00] border-[#FFCF00] hover:bg-[#FFCF00]/10"
-                >
-                  Enter address manually
-                </Button>
-              </div>
-
-              {showAddressFields && (
-                <div className="space-y-4 pt-2">
-                  <FormField
-                    control={form.control}
-                    name="addressLine1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700">Address line 1</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter address line 1"
-                            {...field}
-                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="addressLine2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700">Address line 2</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter address line 2"
-                            {...field}
-                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="addressLine3"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700">Address line 3</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter address line 3"
-                            {...field}
-                            className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
-              
-              {/* Email confirmation note */}
-              <div className="flex items-center mt-4 text-sm text-gray-500">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info size={16} className="text-[#FFCF00] mr-2" />
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-black text-white p-3 max-w-xs">
-                      <p>We'll send you confirmation details to this email address.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                We will send you a booking confirmation email.
-              </div>
-            </div>
-          </div>
-          
           {/* SERVICE RECIPIENT SECTION */}
           <div className="bg-white p-6 rounded-md border border-gray-200 mb-6">
             <h2 className="text-xl font-bold text-[#FFCF00] mb-6">SERVICE RECIPIENT</h2>
@@ -1061,8 +413,90 @@ export const PersonalDetailsForm = ({
               </Button>
             </div>
             
-            {activeRecipient === "self" && renderRecipientFields(false)}
-            {activeRecipient === "other" && renderRecipientFields(true)}
+            {activeRecipient === "self" && (
+              <RecipientForm 
+                form={form}
+                prefix="self"
+                countries={countries}
+                onToggleAddressFields={toggleAddressFields}
+                showAddressFields={showAddressFields}
+                isSecondRecipient={false}
+              />
+            )}
+
+            {activeRecipient === "other" && (
+              <RecipientForm 
+                form={form}
+                prefix="other"
+                countries={countries}
+                onToggleAddressFields={toggleRecipientAddressFields}
+                showAddressFields={showRecipientAddressFields}
+                isSecondRecipient={true}
+              />
+            )}
+          </div>
+
+          {/* YOUR DETAILS SECTION */}
+          <div className="bg-white p-6 rounded-md border border-gray-200 mb-6">
+            <h2 className="text-xl font-bold text-[#FFCF00] mb-6">YOUR DETAILS</h2>
+            <div className="space-y-5">
+              {/* Name fields - Each field in a separate row */}
+              <FormField
+                control={form.control}
+                name="occupation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      Occupation <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your occupation"
+                        {...field}
+                        className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Relationship to service recipient */}
+              <FormField
+                control={form.control}
+                name="relationshipToRecipient"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 flex items-center">
+                      Relationship to service recipient <span className="text-red-500 ml-1">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your relationship"
+                        {...field}
+                        className="border-[#F2F2F2] focus-within:border-[#FFCF00] focus-within:ring-[#FFCF00]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              {/* Email confirmation note */}
+              <div className="flex items-center mt-4 text-sm text-gray-500">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info size={16} className="text-[#FFCF00] mr-2" />
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-black text-white p-3 max-w-xs">
+                      <p>We'll send you confirmation details to this email address.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                We will send you a booking confirmation email.
+              </div>
+            </div>
           </div>
 
           {/* EMAIL MARKETING SECTION */}
