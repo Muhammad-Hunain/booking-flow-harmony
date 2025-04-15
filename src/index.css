@@ -1,6 +1,15 @@
+@import "@fontsource/lato/400.css";
+@import "@fontsource/lato/700.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Lato", sans-serif;
+  }
+}
 
 @layer base {
   :root {

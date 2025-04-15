@@ -28,6 +28,12 @@ export default {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
 				},
+                bookingAccent: "#4CAF50", // Green accent for active steps
+                bookingBg: "#F8F5F0", // Warm off-white background
+                bookingCard: "#FFFFFF", // Card background
+                bookingPill: "#FEF7CD", // Pill soft yellow
+                bookingText: "#333333", // Text color
+                bookingMuted: "#767676", // Muted text
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
