@@ -3,6 +3,8 @@ import { useState } from "react";
 import { BookingProgressBar, Step } from "./BookingProgressBar";
 import { ServiceSelection } from "./ServiceSelection";
 import { PricingBreakdown } from "./PricingBreakdown";
+import { PersonalDetailsForm } from "./PersonalDetailsForm";
+import { ServiceRecipientForm } from "./ServiceRecipientForm";
 import { Card } from "@/components/ui/card";
 
 const STEPS: Step[] = [
@@ -39,52 +41,92 @@ export const BookingFlow = () => {
     }
   };
 
+  const handlePreviousStep = () => {
+    if (currentStep > 1) {
+      const updatedSteps = steps.map((step) => {
+        if (step.id === currentStep) {
+          return { ...step, completed: false, current: false };
+        } else if (step.id === currentStep - 1) {
+          return { ...step, completed: false, current: true };
+        }
+        return step;
+      });
+      
+      setSteps(updatedSteps);
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return <ServiceSelection onContinue={handleNextStep} />;
+      case 2:
+        return <PricingBreakdown selections={selections} onContinue={handleNextStep} />;
+      case 3:
+        return <PersonalDetailsForm selections={selections} onContinue={handleNextStep} onBack={handlePreviousStep} />;
+      case 4:
+        return <ServiceRecipientForm onContinue={handleNextStep} onBack={handlePreviousStep} />;
+      case 5:
+        return (
+          <div className="text-center p-6">
+            <h2 className="text-2xl font-bold mb-4">Booking Confirmation</h2>
+            <p className="text-gray-600 mb-6">
+              Thank you for your booking! A confirmation email has been sent to your email address.
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button 
+                onClick={() => {
+                  const updatedSteps = STEPS.map(step => ({
+                    ...step,
+                    completed: false,
+                    current: step.id === 1
+                  }));
+                  setSteps(updatedSteps);
+                  setCurrentStep(1);
+                }}
+                className="px-4 py-2 rounded-md bg-amber-100 text-amber-900 hover:bg-amber-200"
+              >
+                Make a New Booking
+              </button>
+            </div>
+          </div>
+        );
+      default:
+        return (
+          <div className="text-center p-6">
+            <h2 className="text-2xl font-bold mb-4">Additional Steps Coming Soon</h2>
+            <p className="text-gray-600 mb-6">
+              This step is under construction.
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button 
+                onClick={() => {
+                  const updatedSteps = STEPS.map(step => ({
+                    ...step,
+                    completed: false,
+                    current: step.id === 1
+                  }));
+                  setSteps(updatedSteps);
+                  setCurrentStep(1);
+                }}
+                className="px-4 py-2 rounded-md bg-amber-100 text-amber-900 hover:bg-amber-200"
+              >
+                Start Over
+              </button>
+            </div>
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100/30 flex flex-col items-center pt-8 px-4 pb-12">
       <div className="w-full max-w-md">
         <BookingProgressBar steps={steps} />
         
         <Card className="mt-8 p-6 shadow-lg border-amber-50">
-          {currentStep === 1 && <ServiceSelection onContinue={handleNextStep} />}
-          {currentStep === 2 && <PricingBreakdown selections={selections} onContinue={handleNextStep} />}
-          {currentStep > 2 && (
-            <div className="text-center p-6">
-              <h2 className="text-2xl font-bold mb-4">Additional Steps Coming Soon</h2>
-              <p className="text-gray-600 mb-6">
-                This is a demonstration of the first two steps of the booking flow.
-              </p>
-              <div className="flex justify-center space-x-4">
-                <button 
-                  onClick={() => {
-                    const updatedSteps = STEPS.map(step => ({
-                      ...step,
-                      completed: step.id === 1,
-                      current: step.id === 2
-                    }));
-                    setSteps(updatedSteps);
-                    setCurrentStep(2);
-                  }}
-                  className="px-4 py-2 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300"
-                >
-                  Back to Pricing
-                </button>
-                <button 
-                  onClick={() => {
-                    const updatedSteps = STEPS.map(step => ({
-                      ...step,
-                      completed: false,
-                      current: step.id === 1
-                    }));
-                    setSteps(updatedSteps);
-                    setCurrentStep(1);
-                  }}
-                  className="px-4 py-2 rounded-md bg-amber-100 text-amber-900 hover:bg-amber-200"
-                >
-                  Start Over
-                </button>
-              </div>
-            </div>
-          )}
+          {renderStepContent()}
         </Card>
       </div>
     </div>
